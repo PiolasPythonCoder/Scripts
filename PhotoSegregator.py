@@ -44,6 +44,7 @@ class Photosegregator:
     def metadataReader(self):
         for file in self.photoPaths():
             self.file = file
+            print("file: ", self.file)
             with open(file, 'rb') as src:
                 img = Image(src)
             if img.has_exif:
@@ -60,7 +61,7 @@ class Photosegregator:
                     imageTakenData = data2["imageTakenTime"]
                     imageTakenData = imageTakenData.replace(":", "-").split(" ")
                     self.dataFolder = imageTakenData[0]
-                    gmaps = googlemaps.Client(key='KEY')
+                    gmaps = googlemaps.Client(key='AIzaSyDpwFuUkZ8Zf0syoG7oiYVT8TTqIgZxU3o')
                     # About 'KEY' please contact with me or use your own.
                     reverseGeocodeResult = gmaps.reverse_geocode(photo)
                     try:
@@ -71,9 +72,10 @@ class Photosegregator:
                             try:
                                 city = city2.split(",")[-2]
                                 city = re.sub(r"[^\D]", '', city)
-                                city = re.sub("\s\-", '', city)
+                                city = re.sub("\s\-", '', city).strip()
                             except IndexError:
                                 city = city2.split(",")[-2].split(" ")[-1]
+                                print("city: ", city)
 
                         self.nameFolder = self.dataFolder + ' -' + city
                         print("Name of directory", self.nameFolder)
